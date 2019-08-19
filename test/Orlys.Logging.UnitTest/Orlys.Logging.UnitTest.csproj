@@ -5,7 +5,9 @@
 
     <IsPackable>false</IsPackable>
 
-    <AssemblyVersion>1.0.5.7168</AssemblyVersion>
+    <AssemblyVersion>1.0.10.7170</AssemblyVersion>
+
+    <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
