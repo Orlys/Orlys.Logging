@@ -8,27 +8,28 @@
 
     public abstract class LogServiceBase  
     {
+
+        internal bool IsLevelMatched(LogLevel required, out IReadOnlyList<LogLevel> exploded)
+        {
+            exploded = new List<LogLevel>();
+            foreach (LogLevel r in Enum.GetValues(typeof(LogLevel)))
+            {
+                if (required.HasFlag(r) && this.Level.HasFlag(r))
+                {
+                    ((List<LogLevel>)(exploded)).Add(r);
+                }
+            }
+
+            return exploded.Count > 0;
+        }
+
         public virtual Guid TypeId { get; }
         
         public LogServiceBase()
         {
             this.TypeId = this.GetType().GUID; 
         }
-
-        internal bool IsLevelMatched(LogLevel level, out IReadOnlyList<LogLevel> exploded)
-        {
-            exploded = new List<LogLevel>();
-            foreach (LogLevel r in Enum.GetValues(typeof(LogLevel)))
-            { 
-                if (level.HasFlag(r)) 
-                { 
-                    ((List<LogLevel>)(exploded)).Add(r);
-                }
-            }
-            
-            return exploded.Count > 0;
-        }
-
+        
         protected abstract LogLevel Level { get; }
          
         #region Implicit Convention

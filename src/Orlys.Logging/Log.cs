@@ -1,11 +1,12 @@
 ﻿namespace Orlys.Logging
 {
-    using Orlys.Diagnostics;
-    using Orlys.Logging;
-    using System;
+    using Orlys.Diagnostics; 
     using System.Diagnostics;
     using System.Reflection;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public static class Log
     { 
         private static LogServiceAggregator s_services;
@@ -19,6 +20,8 @@
                 perplexed.In.Is.Value == Is.Static &&
                 perplexed.Declaring == runningAssembly.DeclaringType;
         }
+
+        public static bool Enabled { get; set; } = true;
 
         /// <summary>
         /// Calls this method in entry point's static constructor to setup all of the log services.
@@ -35,16 +38,23 @@
                 throw new LogServiceExeception("Incorrect callsite.", "The method 'SetupLogService' must be called in entry point's static constructor.");
         }
 
+        /// <summary>
+        /// Calls this method when you need to logging something in your code.
+        /// </summary>
+        /// <param name="level"></param>
+        /// <param name="format"></param>
+        /// <param name="args"></param>
         [DebuggerNonUserCode]
         public static void Sink(LogLevel level, string format, params object[] args)
         {
             if (CheckIsMainStaticConstructor())
-            {
                 throw new LogServiceExeception("Incorrect callsite.", "The method 'Sink' should not called in entry point's static constructor.");
-            }
-
+   
             if (s_services == null)
                 throw new LogServiceExeception("Uninitialized log service.", "The method 'SetupLogService' not called yet.");
+
+            if (!Enabled)
+                return;
 
             var preplexed = Perplexed.Locate(1);
             foreach (var service in s_services.Lookup())
@@ -55,18 +65,7 @@
                 } 
             }
         }
-    }
 
-    public sealed class LogServiceExeception : Exception
-    {
-        internal LogServiceExeception(string summary, string detail) : base(summary + "\r\n" + detail)
-        {
-            this.Summary = summary;
-            this.Detail = detail;
-        }
-
-        public string Summary { get; }
-        public string Detail { get; }
     }
 
 

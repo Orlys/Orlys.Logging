@@ -2,6 +2,7 @@
 {
     using Orlys.Diagnostics; 
     using System;
+    using System.Collections.Generic;
     using System.Reflection;
     using System.Threading.Tasks;
 
@@ -11,10 +12,9 @@
         {
             Log.SetupLogService();
         }
-
         private static void Main(string[] args)
         {
-            Log.Sink(LogLevel.Error | LogLevel.Critical , "{0}: {1}", 12, 33);
+            Log.Sink(LogLevel.Debug | LogLevel.Critical, "{0}: {1}", 12, 34);
         }
     }
 }

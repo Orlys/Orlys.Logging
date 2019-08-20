@@ -4,7 +4,7 @@ namespace Orlys.Diagnostics
 {
     using System.Text;
 
-    public static class FakeSpanBridge
+    internal static class FakeSpanBridge
     {
         public static StringBuilder AsSpan(this string str, int startIndex, int length)
         {

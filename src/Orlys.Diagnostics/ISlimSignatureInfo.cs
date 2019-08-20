@@ -16,8 +16,4 @@ namespace Orlys.Diagnostics
         Type Declaring { get; }
         StackFrame StackFrame { get; }
     }
-
-    public interface ISignatureInfo : ISlimSignatureInfo, ILocatable
-    { 
-    }
 }

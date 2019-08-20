@@ -2,8 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyVersion>1.0.58.7170</AssemblyVersion>
+    <AssemblyVersion>1.0.63.7171</AssemblyVersion>
     <Platforms>AnyCPU;x86</Platforms>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Orlys.Diagnostics\Orlys.Diagnostics.csproj" />
+  </ItemGroup>
 
 </Project>

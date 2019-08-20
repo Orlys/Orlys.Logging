@@ -5,11 +5,13 @@
     using System.Linq;
     using System.Reflection;
     using System.Runtime.CompilerServices;
+    using System.Text;
 
     public sealed partial class In
     {
         internal In(ISlimSignatureInfo m, bool isAsync)
         {
+
             var @is = (Is)0;
             if (isAsync)
                 @is |= Diagnostics.Is.Async;
@@ -186,15 +188,6 @@
                 }
             }
             return false;
-        }
-
-        public override string ToString()
-        {
-            if(this.Is.HasValue)
-            {
-                return this.Is.Value.ToString();
-            }
-            return "";
         }
     }
      
