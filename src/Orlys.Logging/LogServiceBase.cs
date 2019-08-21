@@ -63,7 +63,7 @@
         }
         #endregion
 
-        internal protected abstract void OnSink(IReadOnlyList<LogLevel> levels, ISignatureInfo signature, string format, params object[] args);
+        internal protected abstract void OnSink(IReadOnlyList<LogLevel> levels, ISignatureInfo signature, string message);
     }
 }
    

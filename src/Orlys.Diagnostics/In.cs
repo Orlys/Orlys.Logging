@@ -10,8 +10,7 @@
     public sealed partial class In
     {
         internal In(ISlimSignatureInfo m, bool isAsync)
-        {
-
+        { 
             var @is = (Is)0;
             if (isAsync)
                 @is |= Diagnostics.Is.Async;

@@ -1,20 +1,36 @@
 ﻿namespace Orlys.Logging.Dev
 {
-    using Orlys.Diagnostics; 
+    using Orlys.Flatten;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Reflection;
+    using System.Reflection.Emit;
+    using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
 
     internal class Program
     {
         static Program()
         {
-            Log.SetupLogService();
+            Log.Setup();
         }
-        private static void Main(string[] args)
+
+        static void Main(string[] args)
         {
-            Log.Sink(LogLevel.Debug | LogLevel.Critical, "{0}: {1}", 12, 34);
+            TryCatch
+                .Try(() => throw new ArgumentNullException("a"))
+                .Catch<ArgumentNullException>(e => Console.WriteLine("A: " + e))
+                .Catch(x => Console.WriteLine("B: " + x))
+                .Go();
+
+            var k = TryCatch
+                .Try(() => throw new ArgumentException(), 12)
+                .Catch()
+                .Go();
+
+            Console.WriteLine(k);
         }
     }
+
 }

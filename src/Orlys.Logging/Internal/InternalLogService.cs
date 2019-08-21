@@ -11,11 +11,11 @@ namespace Orlys.Logging.Internal
     {
         protected override LogLevel Level => LogLevel.Debug;
 
-        protected internal override void OnSink(IReadOnlyList<LogLevel> levels, ISignatureInfo signature, string format, params object[] args)
+        protected internal override void OnSink(IReadOnlyList<LogLevel> levels, ISignatureInfo signature, string message)
         { 
             foreach (var level in levels)
             {
-                Console.WriteLine($"[{signature},{level}] {string.Format(format, args)}");
+                Console.WriteLine($"[{signature},{level}] {message}");
             }
         }
     }

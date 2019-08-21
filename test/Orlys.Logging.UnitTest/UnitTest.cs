@@ -15,7 +15,7 @@ namespace Orlys.Logging.UnitTest
             var log = new InternalLogService();
             var k = log + log + log;
 
-            Log.SetupLogService(log + log);
+            Log.Setup(log + log);
 
             Log.Sink(LogLevel.Critical | LogLevel.Error, "xxx", 1258);
         }

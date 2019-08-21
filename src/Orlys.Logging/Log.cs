@@ -8,29 +8,47 @@
     /// 
     /// </summary>
     public static class Log
-    { 
+    {
+        private static object s_spinLock = new object();
         private static LogServiceAggregator s_services;
 
         private static bool CheckIsMainStaticConstructor()
         {
             var runningAssembly = Assembly.GetEntryAssembly().EntryPoint;
             var perplexed = Perplexed.Locate(2);
-            return 
+            return
                 perplexed.In.Constructor &&
                 perplexed.In.Is.Value == Is.Static &&
                 perplexed.Declaring == runningAssembly.DeclaringType;
         }
 
-        public static bool Enabled { get; set; } = true;
+        private static bool s_enabled = true;
+        public static bool Enabled
+        {
+            get
+            {
+                lock (s_spinLock)
+                {
+                    return s_enabled;
+                }
+            }
+            set
+            {
+                lock (s_spinLock)
+                {
+                    s_enabled = value;
+                }
+            }
+        }
 
         /// <summary>
         /// Calls this method in entry point's static constructor to setup all of the log services.
         /// </summary>
         /// <param name="services">The services what you want to use.</param> 
         [DebuggerNonUserCode]
-        public static void SetupLogService(LogServiceAggregator services = null)
+        public static void Setup(LogServiceAggregator services = null)
         {
-            if(CheckIsMainStaticConstructor())
+            if (CheckIsMainStaticConstructor())
             {
                 s_services = services ?? Default.LogService;
             }
@@ -49,24 +67,24 @@
         {
             if (CheckIsMainStaticConstructor())
                 throw new LogServiceExeception("Incorrect callsite.", "The method 'Sink' should not called in entry point's static constructor.");
-   
+
             if (s_services == null)
                 throw new LogServiceExeception("Uninitialized log service.", "The method 'SetupLogService' not called yet.");
 
-            if (!Enabled)
-                return;
+            lock (s_spinLock)
+            {
+                if (!Enabled)
+                    return;
 
-            var preplexed = Perplexed.Locate(1);
-            foreach (var service in s_services.Lookup())
-            { 
-                if (service.IsLevelMatched(level, out var list))
+                var preplexed = Perplexed.Locate(1);
+                foreach (var service in s_services.Lookup())
                 {
-                    service.OnSink(list, preplexed, format, args);
-                } 
+                    if (service.IsLevelMatched(level, out var list))
+                    {
+                        service.OnSink(list, preplexed, string.Format(format, args));
+                    }
+                }
             }
         }
-
     }
-
-
 }

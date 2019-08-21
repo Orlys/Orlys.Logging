@@ -22,7 +22,5 @@ namespace Orlys.Diagnostics
         public static bool IsDebug { get; }
 
         public static bool IsUnsafe { get; } 
-
     }
 }
-//[assembly: SecurityPermission(SecurityAction.RequestMinimum, SkipVerification=true)]
