@@ -83,7 +83,9 @@
         }
 
         private static bool EventCore(ISlimSignatureInfo m, string prefix)
-        {
+        {            
+            if (m.Name.Length < prefix.Length)
+                return false;
             var prefixMatch = m.Name.AsSpan(0, prefix.Length).SequenceEqual(prefix);
             var name = m.Name.AsSpan(prefix.Length).ToString();
             var hasEvent = m.Declaring.GetEvent(name, BindingFilter) is EventInfo;
